@@ -12,4 +12,11 @@ import lombok.NoArgsConstructor;
 public class AuthResponse {
 
     private String token;
+    private Long sellerId;
+    private String email;
+    private String businessName;
+
+    public AuthResponse(String token) {
+        this.token = token;
+    }
 }

@@ -12,9 +12,14 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.transaction.TransactionException;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -77,6 +82,27 @@ public class GlobalExceptionHandler {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "Image upload size exceeds server limit (50MB). Please select smaller images.");
         return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(errorResponse);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, String>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        log.warn("Database integrity violation: {}", ex.getMessage());
+        Map<String, String> errorResponse = new HashMap<>();
+        String message = ex.getMessage();
+        if (message != null && (message.contains("email") || message.contains("uq_seller_email") || message.contains("sellers_email_key"))) {
+            errorResponse.put("error", "Email is already registered. Please sign in or use another email.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+        }
+        errorResponse.put("error", "A data conflict occurred. Please verify your submitted information.");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(TransactionException.class)
+    public ResponseEntity<Map<String, String>> handleTransactionException(TransactionException ex) {
+        log.error("Database transaction failure: ", ex);
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Database transaction could not be completed. Please try again.");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
     @ExceptionHandler(Exception.class)
