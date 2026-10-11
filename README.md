@@ -80,29 +80,24 @@ chmod +x ./start-all.sh
 
 ---
 
-## 🚀 Cloud Deployment (Zero Docker Required)
+## 🚀 Cloud Deployment
 
-### 1. Backend Deployment (Render or Railway)
-Deploy directly from your GitHub repository using native Java 17:
+### 1. Backend Deployment (Render - Docker Web Service)
+Render does not offer a native Java runtime, so it runs Spring Boot via the included multi-stage `Dockerfile`:
 
-* **Platform**: [Render.com](https://render.com) (Web Service) or [Railway.app](https://railway.app)
+* **Platform**: [Render.com](https://render.com) -> **New Web Service** -> Connect `listube` repo
 * **Root Directory**: `backend`
-* **Runtime**: `Java` (Java 17)
-* **Build Command**:
-  ```bash
-  mvn clean package -DskipTests
-  ```
-* **Start Command**:
-  ```bash
-  java -jar target/listing-platform-0.0.1-SNAPSHOT.jar
-  ```
+* **Runtime**: **Docker** (Render will automatically detect `backend/Dockerfile`)
+* **Instance Type**: Free / Starter
 * **Environment Variables** (from [backend/.env.example](file:///d:/ecommerce/backend/.env.example)):
-  - `SPRING_DATASOURCE_URL`: `jdbc:postgresql://db.ryfddbpbmcfocdsysinh.supabase.co:5432/postgres?sslmode=require`
+  - `SPRING_DATASOURCE_URL`: `jdbc:postgresql://db.<PROJECT-REF>.supabase.co:5432/postgres?sslmode=require`
   - `SPRING_DATASOURCE_USERNAME`: `postgres`
-  - `SPRING_DATASOURCE_PASSWORD`: `Anmol@56346881`
+  - `SPRING_DATASOURCE_PASSWORD`: `<your-supabase-db-password>`
   - `SPRING_FLYWAY_ENABLED`: `false`
-  - `SUPABASE_URL`: `https://ryfddbpbmcfocdsysinh.supabase.co`
-  - `JWT_SECRET`: your secret key
+  - `SUPABASE_URL`: `https://<PROJECT-REF>.supabase.co`
+  - `JWT_SECRET`: `<your-jwt-secret>`
+
+*(Render automatically injects the `PORT` environment variable, which the application and Dockerfile bind to dynamically).*
 
 ---
 
