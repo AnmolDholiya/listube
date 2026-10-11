@@ -1,0 +1,1 @@
+ALTER TABLE publish_batches ADD COLUMN version INTEGER NOT NULL DEFAULT 0;

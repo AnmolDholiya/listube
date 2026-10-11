@@ -1,0 +1,50 @@
+target/
+backend/target/
+**/target/
+uploads/
+backend/uploads/
+**/uploads/
+node_modules/
+frontend/node_modules/
+**/node_modules/
+frontend/dist/
+dist/
+.env
+**/.env
+.env.local
+!.mvn/wrapper/maven-wrapper.jar
+!target/classes/META-INF/MANIFEST.MF
+
+### Compiled class file ###
+*.class
+
+### Log file ###
+*.log
+
+### Package Files ###
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+### Virtual machine crash logs ###
+hs_err_pid*
+replay_pid*
+
+### IDE files ###
+.idea/
+*.iws
+*.iml
+*.ipr
+.eclipse/
+.classpath
+.project
+.settings/
+.vscode/
+
+### OS files ###
+.DS_Store
+Thumbs.db
